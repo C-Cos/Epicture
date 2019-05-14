@@ -25,7 +25,7 @@ export default class HomeScreen extends React.Component {
             <Image
               source={
                 __DEV__
-                  ? require('../assets/images/robot-dev.png')
+                  ? require('../assets/images/death-star.png')
                   : require('../assets/images/robot-prod.png')
               }
               style={styles.welcomeImage}
@@ -36,25 +36,11 @@ export default class HomeScreen extends React.Component {
 
             <Text style={styles.getStartedText}>Welcome to Epicture</Text>
 
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
+            <Text style={styles.test}>
+              Connect to Imgur, browse, upload and share your favorite picture !
             </Text>
           </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
@@ -115,7 +101,7 @@ const styles = StyleSheet.create({
   },
   welcomeImage: {
     width: 100,
-    height: 80,
+    height: 100,
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
@@ -136,9 +122,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   getStartedText: {
-    fontSize: 17,
+    fontSize: 20,
     color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    lineHeight: 30,
     textAlign: 'center',
   },
   tabBarInfoContainer: {
@@ -165,6 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
+  },
+  test: {
+    textAlign: "center",
+    marginTop: 100,
+    fontSize: 30,
+
   },
   navigationFilename: {
     marginTop: 5,
