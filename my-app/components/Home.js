@@ -3,14 +3,23 @@ import { Image, ScrollView, Text, View, StyleSheet, Button, Alert, Linking, WebV
 //import StarLogo from './assets/images/death-star.png'
 
 export default class Home extends React.Component {
-
+      state = {
+        user: ''
+    }
+    componentDidMount(){
+      this.checkToken();
+    }
     checkToken(){
         AsyncStorage.getItem("accessToken")
         .then(result => {
-            console.log(result)
+            //console.log(result)
             if(result)
             {
-                this.props.navigation.navigate('Space')
+              this.setState({
+                user: true
+              })
+              this.props.navigation.navigate('Space');
+              
             }
         })
         .catch(err => {
@@ -32,7 +41,6 @@ export default class Home extends React.Component {
                 title="Logout"
                 onPress={()=>this.removeToken()}
         />
-        {this.checkToken()}
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
           <Image style={styles.welcomeImage}

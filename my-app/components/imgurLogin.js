@@ -5,9 +5,9 @@ export default class imgurLogin extends React.Component {
 
     onNavigationStateChange = navState => {
         //console.log(JSON.stringify(navState.url));
-        if (navState.url === 'https://api.imgur.com/oauth2/authorize?client_id=54a2deb5d91420d&response_type=token')
+        if (navState.url.split('#')[0] === 'https://www.getpostman.com/oauth2/callback')
         {
-            mynew = 'https://www.getpostman.com/oauth2/callback#access_token=aa5d2f7d1ae64d5bf864e54107bdafe0a9fcf243&expires_in=315360000&token_type=bearer&refresh_token=87ced1a59c27d2e281e6eca94b35866fca5dcb34&account_username=NicoleZessec2&account_id=107686465';
+            mynew = navState.url;
             const access =  mynew.split('#')[1];
             //console.log(access);
             const newacess = access.split('=');
@@ -34,7 +34,7 @@ export default class imgurLogin extends React.Component {
 
             AsyncStorage.multiSet([['username', account_name[0]],['accessToken', token[0]],['accountId', account_id],['refreshToken', refresh_token[0]]]);
             //AsyncStorage.getItem("username", (err, res) =>  {console.log(res)});
-            //AsyncStorage.getItem("accessToken").then(result => {console.log(result)}).catch(err => {console.log(err)})
+            AsyncStorage.getItem("accessToken").then(result => {console.log(result)}).catch(err => {console.log(err)})
             this.props.navigation.navigate('Home');
         }
       };
