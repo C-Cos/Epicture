@@ -1,7 +1,10 @@
 import React from 'react';
-import { ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity} from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { FlatList } from 'react-native-gesture-handler';
+import { Card, Icon} from 'react-native-elements'
+
 
 
 export default class MySpace extends React.Component {
@@ -10,12 +13,14 @@ export default class MySpace extends React.Component {
     this.state = {
       search: '',
       result: [],
+      viral: [],
       name: '',
       token: ''
     };
   }
   componentDidMount(){
     this._checkToken();
+    this._mostViral();
   }
 
   _checkToken(){
@@ -66,7 +71,6 @@ export default class MySpace extends React.Component {
       //console.log('ok');
       this.setState({
         result: responseJson.data,
-        isLoading: false
       })
       
       //console.log(this.state.result);
@@ -119,6 +123,62 @@ export default class MySpace extends React.Component {
         });
     }
   }
+
+  _mostViral(){
+    fetch('https://api.imgur.com/3/gallery/top/top', {
+      "method": "GET",
+      "headers": {
+        "Authorization": "Client-ID 54a2deb5d91420d",
+      },
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+    })
+    .then((response) => response.json())
+    //If response is in json then in success
+    .then((responseJson) => {
+      //console.log(responseJson);
+      this.setState({
+        viral: responseJson.data,
+      })
+      
+    })
+    //If response is not in json then in error
+    .catch((error) => {
+        //Error 
+        alert(JSON.stringify(error));
+        console.error(error);
+    });
+  }
+
+  _renderItem(item){
+    //console.log(item);
+    if(typeof item.images === 'object'){
+        //console.log('inside');
+        return (
+            <Card
+                title={item.title}>
+                <View>
+                    <Image
+                        source={{ uri: item.images[0].link }}
+                        style={styles.image}
+                        //PlaceholderContent={<ActivityIndicator />}
+                    />
+                </View>
+                <Text style={{marginBottom: 10}}>
+                    {item.images[0].description}
+                </Text>
+                <Button
+                    icon={<Icon name='code' color='#ffffff' />}
+                    backgroundColor='#03A9F4'
+                    onPress={() => this._AddToFavorite(item.images[0].id)}
+                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                    title='Add to favorite' />
+            </Card>
+        )
+    }
+    
+}
 
   render() {
     return (
@@ -178,6 +238,14 @@ export default class MySpace extends React.Component {
 
               </TouchableOpacity>
             </View>
+            <View>
+              <Text style={styles.getStartedText}>Most Viral</Text>
+              <FlatList
+                data= {this.state.viral}
+                keyExtractor= {(item) => item.id.toString()}
+                renderItem={({item}) => this._renderItem(item)}
+              />
+            </View>
         </ScrollView>
       </KeyboardAwareScrollView>
     );
@@ -185,6 +253,10 @@ export default class MySpace extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  image: {
+    width: 300,
+    height: 300,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

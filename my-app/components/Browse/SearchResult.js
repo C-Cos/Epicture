@@ -34,10 +34,6 @@ export default class SearchResult extends React.Component {
         console.error(error);
         });
     }
-
-
-
-
     _renderItem(item){
         console.log(item);
         if(typeof item.images === 'object'){
@@ -86,24 +82,8 @@ export default class SearchResult extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    backgroundVideo: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-      },
     image: {
         width: 300,
         height: 300,
     },
-    loading_container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 100,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
 })

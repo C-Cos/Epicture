@@ -63,7 +63,7 @@ export default class Favorite extends React.Component {
     }
 
     _renderItem(item){
-        console.log("item in render: ", item);
+        //console.log("item in render: ", item);
         return (
           <View>
             <Image

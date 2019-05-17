@@ -2,14 +2,14 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation';
 
-import Album from "./Album";
+//import Album from "./Album";
 import Post from "./Post";
 import Favorite from "./Favorite";
 
 const HomeTab = createMaterialTopTabNavigator({
     Post: Post,
     Favorite: Favorite,
-    Album: Album,
+    //Album: Album,
   }, {
     tabBarOptions: {
       scrollEnabled: false,
