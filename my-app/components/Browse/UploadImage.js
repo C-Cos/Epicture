@@ -51,7 +51,8 @@ export default class UploadImage extends React.Component {
         //If response is in json then in success
         .then((responseJson) => {
             //console.log(responseJson);
-            this.props.navigation.navigate('Profile');
+            alert("Your Image has been Uploaded ! Check your posts in Profile.")
+            this.props.navigation.goBack();
 
         })
         //If response is not in json then in error

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, ScrollView, Text, View, StyleSheet, Button, Alert, Linking, WebView, AsyncStorage } from 'react-native';
-//import StarLogo from './assets/images/death-star.png'
 
 export default class Home extends React.Component {
       state = {

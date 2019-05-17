@@ -3,12 +3,12 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import Browse from '../components/Browse';
+import Browse from '../components/Browse/Browse';
 import imgurLogin from '../components/imgurLogin';
 import Home from '../components/Home';
-import SearchResult from "../components/SearchResult";
-import UploadImage from "../components/UploadImage";
-import Profile from "../components/Profile";
+import SearchResult from "../components/Browse/SearchResult";
+import UploadImage from "../components/Browse/UploadImage";
+import Profile from "../components/Profile/Profile";
 
 const HomeStack = createStackNavigator({
   Home: Home,

@@ -4,9 +4,42 @@ import { Card, Icon} from 'react-native-elements'
 import { FlatList } from 'react-native-gesture-handler';
 
 export default class SearchResult extends React.Component {
+    constructor(props) {
+        super(props);
+        this._AddToFavorite = this._AddToFavorite.bind(this);
+      }
+    
+    _AddToFavorite(id){
+        //POST request 
+        fetch('https://api.imgur.com/3/image/' + id + '/favorite', {
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer 71ca6576db1cd20c655591cb3628b52a653f823b",
+                "Accept": 'application/json'
+            },
+            
+        })
+        .then((response) => response.json())
+        //If response is in json then in success
+        .then((responseJson) => {
+            console.log(responseJson);
+            alert("Added to your favorite !")
+            //this.props.navigation.goBack();
+
+        })
+        //If response is not in json then in error
+        .catch((error) => {
+        //alert(JSON.stringify(error));
+        console.error(error);
+        });
+    }
+
+
+
 
     _renderItem(item){
-        console.log('voila', item, item.images);
+        console.log(item);
         if(typeof item.images === 'object'){
             //console.log('inside');
             return (
@@ -25,9 +58,9 @@ export default class SearchResult extends React.Component {
                     <Button
                         icon={<Icon name='code' color='#ffffff' />}
                         backgroundColor='#03A9F4'
-                        onPress={()=> alert("bouton")}
+                        onPress={() => this._AddToFavorite(item.images[0].id)}
                         buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                        title='VIEW' />
+                        title='Add to favorite' />
                 </Card>
             )
         }

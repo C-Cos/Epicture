@@ -14,6 +14,9 @@ export default class MySpace extends React.Component {
       token: ''
     };
   }
+  componentDidMount(){
+    this._checkToken();
+  }
 
   _checkToken(){
     AsyncStorage.multiGet(["accessToken", "username"])
@@ -105,13 +108,19 @@ export default class MySpace extends React.Component {
     if(status === 'granted') {
       let image = await ImagePicker.launchCameraAsync({
         mediaTypes: 'Images',
+        allowsEditing: true,
+        mediaTypes: 'Images',
+        aspect: [4, 3],
+        base64: true
       }).catch(error => console.log(permissions, { error }));
       console.log(permissions, 'SUCCESS', image);
+      this.props.navigation.navigate('Upload', {
+        result: image
+        });
     }
   }
 
   render() {
-    this._checkToken();
     return (
       <KeyboardAwareScrollView
             style={{ backgroundColor: '#fff' }}
