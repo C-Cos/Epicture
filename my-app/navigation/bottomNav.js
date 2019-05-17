@@ -3,11 +3,12 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import Space from '../components/mySpace';
+import Browse from '../components/Browse';
 import imgurLogin from '../components/imgurLogin';
 import Home from '../components/Home';
 import SearchResult from "../components/SearchResult";
 import UploadImage from "../components/UploadImage";
+import Profile from "../components/Profile";
 
 const HomeStack = createStackNavigator({
   Home: Home,
@@ -20,42 +21,43 @@ HomeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
     />
   ),
 };
 
-const SpaceStack = createStackNavigator({
-  Space: Space,
+const BrowseStack = createStackNavigator({
+  Browse: Browse,
   SearchR : SearchResult,
-  Upload : UploadImage
+  Upload : UploadImage,
 });
 
-SpaceStack.navigationOptions = {
-  tabBarLabel: 'MySpace',
+BrowseStack.navigationOptions = {
+  tabBarLabel: 'Browse',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
     />
   ),
 };
 
-/* const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const ProfileStack = createStackNavigator({
+  Profile: Profile
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+ProfileStack.navigationOptions = {
+  tabBarLabel: 'Profile',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
     />
   ),
-}; */
+};
 
 export default createBottomTabNavigator({
   HomeStack,
-  SpaceStack,
+  BrowseStack,
+  ProfileStack
 });

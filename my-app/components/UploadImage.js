@@ -1,6 +1,8 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, Button, TextInput} from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Image, ScrollView, Text, View, StyleSheet, Button, TextInput, AsyncStorage} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {decode, encode} from 'base-64';
+//import imgur from "imgur";
 
 
 export default class UploadImage extends React.Component {
@@ -9,7 +11,7 @@ export default class UploadImage extends React.Component {
         this.state = {
           title: '',
           desc: '',
-          token: ''
+          token: '', 
         };
       }
 
@@ -30,29 +32,27 @@ export default class UploadImage extends React.Component {
       }
 
       Upload(image){
-        var dataToSend = {
-            title: this.state.title, 
-            desc: this.state.desc, 
-        };
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append("title", this.state.title);
+        formData.append("description", this.state.desc);
         //POST request 
         fetch('https://api.imgur.com/3/image', {
             "method": "POST",
             "timeout": 0,
-            "body": dataToSend,
+            "body": formData,
             "headers": {
-                "Authorization": "Client-ID 54a2deb5d91420d",
-                "Authorization": "Bearer 71ca6576db1cd20c655591cb3628b52a653f823b"
+                "Authorization": "Bearer 71ca6576db1cd20c655591cb3628b52a653f823b",
+                "Accept": 'application/json'
             },
-            "processData": false,
-            "mimeType": "multipart/form-data",
-            "contentType": false,
-            "data": image.uri
+            
         })
         .then((response) => response.json())
         //If response is in json then in success
         .then((responseJson) => {
-            alert(JSON.stringify(responseJson));
-            console.log(responseJson);
+            //console.log(responseJson);
+            this.props.navigation.navigate('Profile');
+
         })
         //If response is not in json then in error
         .catch((error) => {
@@ -97,7 +97,7 @@ export default class UploadImage extends React.Component {
                 <Button
                     //icon={<Icon name='code' color='#ffffff' />}
                     backgroundColor='#03A9F4'
-                    onPress={()=>this.Upload(image.uri)}
+                    onPress={()=>this.Upload(image.base64)}
                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                     title='Upload Image' />
  

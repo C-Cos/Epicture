@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 export default class MySpace extends React.Component {
   constructor(props) {
@@ -8,19 +10,26 @@ export default class MySpace extends React.Component {
     this.state = {
       search: '',
       result: [],
-      isLoading: false,
-      image: null,
+      name: '',
+      token: ''
     };
   }
 
   _checkToken(){
-    //console.log('inside checktoken');
-    AsyncStorage.getItem("accessToken")
+    AsyncStorage.multiGet(["accessToken", "username"])
       .then(result => {
-          //console.log(result)
+          console.log(result[0][1]);
+          console.log(result[1][1]);
           if(result === null)
           {
-            this.props.navigation.pop(1);
+            this.props.navigation.navigate('Home');
+          }
+          else
+          {
+              this.setState({
+                  name: result[1][1],
+                  token: result[0][1]
+              })
           }
       })
       .catch(err => {
@@ -79,6 +88,7 @@ export default class MySpace extends React.Component {
         allowsEditing: true,
         mediaTypes: 'Images',
         aspect: [4, 3],
+        base64: true
       }).catch(error => console.log(permissions, { error }));
       console.log(permissions, 'SUCCESS', image);
       this.props.navigation.navigate('Upload', {
@@ -101,17 +111,21 @@ export default class MySpace extends React.Component {
   }
 
   render() {
-    //this._checkToken();
-    //console.log('render: ', (this.state.result.length > 0) ? this.state.result[0] : 'nothing');
+    this._checkToken();
     return (
-      <View style={styles.container}>
+      <KeyboardAwareScrollView
+            style={{ backgroundColor: '#fff' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={styles.container}
+            scrollEnabled={true}>
         <Button
             title="Logout"
             onPress={()=>this.removeToken()}
         />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.getStartedContainer}>
-            <Text style={styles.getStartedText}>You are now on your personal space !</Text>
+            <Text style={styles.getStartedText}>Hello {this.state.name}</Text>
+            <Text style={styles.getStartedText}>Browse from Imgur or Upload your favorite image !</Text>
           </View>
 
             <TextInput
@@ -124,7 +138,7 @@ export default class MySpace extends React.Component {
             />  
             <View>
               <TouchableOpacity
-                  style={styles.saveButton}
+                  style={styles.searchButton}
                   onPress={()=>this.Search()}
                   value={this.state.search}
                   >
@@ -156,7 +170,7 @@ export default class MySpace extends React.Component {
               </TouchableOpacity>
             </View>
         </ScrollView>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -216,6 +230,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#007BFF',
     backgroundColor: '#007BFF',
+    padding: 15,
+    margin: 5
+  },
+  searchButton: {
+    width: 250,
+    marginLeft: 60,
+    marginBottom: 30,
+    borderWidth: 1,
+    borderColor: '#007BFF',
+    backgroundColor: '#2DC3CA',
     padding: 15,
     margin: 5
   },

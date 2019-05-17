@@ -27,20 +27,9 @@ export default class Home extends React.Component {
         })
     }
 
-    removeToken(){
-        let keys = ['username', 'accessToken', 'accountId', 'refreshToken'];
-        AsyncStorage.multiRemove(keys, (err) => {
-            console.log('successful remove');
-        });
-    }
-
   render() {
     return (
       <View style={styles.container}>
-        <Button
-                title="Logout"
-                onPress={()=>this.removeToken()}
-        />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
           <Image style={styles.welcomeImage}
