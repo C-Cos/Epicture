@@ -7,59 +7,45 @@ export default class Favorite extends React.Component {
         super(props);
         this.state = {
             images: [],
-            name: '',
-            token: ''
         };
       }
 
     componentDidMount(){
-        this._checkToken();
-        this._ImageFavorite();
-    }
-
-    _checkToken(){
-        AsyncStorage.multiGet(["accessToken", "username"])
-          .then(result => {
-              //console.log(result[0][1]);
-              //console.log(result[1][1]);
-              if(result === null)
-              {
-                this.props.navigation.navigate('Home');
-              }
-              else
-              {
-                  this.setState({
-                      name: result[1][1],
-                      token: result[0][1]
-                  })
-              }
-          })
-          .catch(err => {
-              console.log(err)
-          })
-      }
-
-    _ImageFavorite(){
-        fetch('https://api.imgur.com/3/account/NicoleZessec2/favorites', {
+      AsyncStorage.multiGet(["accessToken", "username"])
+      .then(result => {
+          //console.log(result[0][1]);
+          //console.log(result[1][1]);
+          if(result === null)
+          {
+            this.props.navigation.navigate('Home');
+          }
+          else
+          {
+            fetch('https://api.imgur.com/3/account/NicoleZessec2/favorites', {
             "method": "GET",
             "headers": {
-              "Authorization": "Bearer 009c835452d021690f1bc8c8484cd6ab339cf8c6"
-            },
-        })
-        .then((response) => response.json())
-        //If response is in json then in success
-        .then((responseJson) => {
-            //console.log(responseJson);
-            this.setState({
-                images: responseJson.data,
+              "Authorization": "Bearer " + result[0][1] /* 009c835452d021690f1bc8c8484cd6ab339cf8c6" */
+              },
             })
-        })
-        //If response is not in json then in error
-        .catch((error) => {
-            //Error 
-            //alert(JSON.stringify(error));
-            console.error("error:" + error);
-        });
+            .then((response) => response.json())
+            //If response is in json then in success
+            .then((responseJson) => {
+                //console.log(responseJson);
+                this.setState({
+                    images: responseJson.data,
+                })
+            })
+            //If response is not in json then in error
+            .catch((error) => {
+                //Error 
+                //alert(JSON.stringify(error));
+                console.error("error:" + error);
+            });
+          }
+      })
+      .catch(err => {
+          console.log(err)
+      })
     }
 
     _renderItem(item){

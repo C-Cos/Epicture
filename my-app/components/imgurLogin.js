@@ -35,7 +35,7 @@ export default class imgurLogin extends React.Component {
             AsyncStorage.multiSet([['username', account_name[0]],['accessToken', token[0]],['accountId', account_id],['refreshToken', refresh_token[0]]]);
             //AsyncStorage.getItem("username", (err, res) =>  {console.log(res)});
             AsyncStorage.getItem("accessToken").then(result => {console.log(result)}).catch(err => {console.log(err)})
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('Profile');
         }
       };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation';
+import { createMaterialTopTabNavigator} from 'react-navigation';
 
 //import Album from "./Album";
 import Post from "./Post";
@@ -19,7 +19,7 @@ const HomeTab = createMaterialTopTabNavigator({
 
       },
       style: {
-        backgroundColor: '#09BDC5',
+        backgroundColor: '#007BFF',
         opacity: 0.2
       },
       indicatorStyle: {

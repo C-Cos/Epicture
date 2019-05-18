@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, Button, TextInput, AsyncStorage} from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, AsyncStorage, TouchableOpacity} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {decode, encode} from 'base-64';
 //import imgur from "imgur";
@@ -15,23 +15,23 @@ export default class UploadImage extends React.Component {
         };
       }
 
-      _checkToken(){
-        //console.log('inside checktoken');
+      componentDidMount(){
         AsyncStorage.getItem("accessToken")
-          .then(result => {
-              console.log(result)
-              if(result === null)
-              {
-                this.setState({ token: result});  
-                this.props.navigation.pop(1);
-              }
-          })
-          .catch(err => {
-              console.log(err)
-          })
+        .then(result => {
+            console.log(result)
+            if(result === null)
+            {
+              this.setState({ token: result});  
+              this.props.navigation.goBack();
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
       }
 
-      Upload(image){
+      Upload(image, token){
         const formData = new FormData();
         formData.append('image', image);
         formData.append("title", this.state.title);
@@ -42,7 +42,7 @@ export default class UploadImage extends React.Component {
             "timeout": 0,
             "body": formData,
             "headers": {
-                "Authorization": "Bearer 71ca6576db1cd20c655591cb3628b52a653f823b",
+                "Authorization": "Bearer "+token /* 71ca6576db1cd20c655591cb3628b52a653f823b" */,
                 "Accept": 'application/json'
             },
             
@@ -64,15 +64,16 @@ export default class UploadImage extends React.Component {
 
 
     render() {
-        this._checkToken();
         const { navigation } = this.props;
         const image = navigation.getParam('result', 'No Result');
+        const token = navigation.getParam('token', 'token');
         return (
         <KeyboardAwareScrollView
             style={{ backgroundColor: '#fff' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={styles.container}
             scrollEnabled={true}>
+            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <Image
                     source={{ uri: image.uri }}
                     style={styles.image}
@@ -82,7 +83,7 @@ export default class UploadImage extends React.Component {
                 <TextInput
                     onChangeText={(title) => this.setState({ title })}
                     placeholder={'Enter a title ...'}
-                    style={styles.input}
+                    style={styles.Titleinput}
                     value={this.state.title}
                     autoFocus = {true}
                     clearTextOnFocus = {true}
@@ -90,17 +91,24 @@ export default class UploadImage extends React.Component {
                 <TextInput
                     onChangeText={(desc) => this.setState({ desc })}
                     placeholder={'Enter a description ...'}
-                    style={styles.input}
+                    multiline = {true}
+                    numberOfLines = {10}
+                    style={styles.Descinput}
                     value={this.state.desc}
                     autoFocus = {true}
                     clearTextOnFocus = {true}
                 /> 
-                <Button
-                    //icon={<Icon name='code' color='#ffffff' />}
-                    backgroundColor='#03A9F4'
-                    onPress={()=>this.Upload(image.base64)}
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                    title='Upload Image' />
+                <View style={styles.ButtonSection}>
+                    <TouchableOpacity
+                        style={styles.favorite}
+                        onPress={()=>this._AddToFavorite()}
+                        >
+
+                        <Text style={styles.searchButtonText}>Add to Favorite</Text>
+
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
  
         </KeyboardAwareScrollView>
         );
@@ -118,13 +126,43 @@ const styles = StyleSheet.create({
         height: 300,
         marginLeft: 40,
         marginTop: 30,
+        borderRadius:10
     },
-    input: {
+    favorite: {
+        width: 150,
+        marginBottom: 30,
+        borderWidth: 1,
+        borderColor: '#007BFF',
+        backgroundColor: '#fff',
+        padding: 10,
+        margin: 5,
+        borderRadius: 10
+      },
+    searchButtonText: {
+        color: '#007BFF',
+        fontSize: 15,
+        textAlign: 'center'
+      },
+    ButtonSection: {
+        justifyContent: 'center',
+        alignItems: 'center'
+     },
+    Titleinput: {
         width: 250,
         height: 44,
         padding: 10,
-        marginTop: 30,
+        marginTop: 10,
         marginLeft: 60,
-        backgroundColor: '#ecf0f1'
+        backgroundColor: '#ecf0f1',
+        borderRadius:10
+      },
+    Descinput: {
+        width: 300,
+        height: 200,
+        padding: 10,
+        marginTop: 10,
+        marginLeft: 40,
+        backgroundColor: '#ecf0f1',
+        borderRadius:10
       },
 })

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity} from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity, ImageBackground} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FlatList } from 'react-native-gesture-handler';
@@ -19,15 +19,11 @@ export default class MySpace extends React.Component {
     };
   }
   componentDidMount(){
-    this._checkToken();
     this._mostViral();
-  }
-
-  _checkToken(){
     AsyncStorage.multiGet(["accessToken", "username"])
       .then(result => {
-          console.log(result[0][1]);
-          console.log(result[1][1]);
+          //console.log(result[0][1]);
+          //console.log(result[1][1]);
           if(result === null)
           {
             this.props.navigation.navigate('Home');
@@ -76,7 +72,9 @@ export default class MySpace extends React.Component {
       //console.log(this.state.result);
       this.props.navigation.navigate('SearchR', {
         result: this.state.result,
-        loading: this.state.isLoading
+        loading: this.state.isLoading,
+        name: this.state.name,
+        token: this.state.token
         });
     })
     //If response is not in json then in error
@@ -99,7 +97,8 @@ export default class MySpace extends React.Component {
       }).catch(error => console.log(permissions, { error }));
       console.log(permissions, 'SUCCESS', image);
       this.props.navigation.navigate('Upload', {
-        result: image
+        result: image,
+        token: this.state.token
         });
     }
   };
@@ -119,7 +118,8 @@ export default class MySpace extends React.Component {
       }).catch(error => console.log(permissions, { error }));
       console.log(permissions, 'SUCCESS', image);
       this.props.navigation.navigate('Upload', {
-        result: image
+        result: image,
+        token: this.state.token
         });
     }
   }
@@ -187,59 +187,52 @@ export default class MySpace extends React.Component {
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={styles.container}
             scrollEnabled={true}>
-        <Button
-            title="Logout"
-            onPress={()=>this.removeToken()}
-        />
+          <ImageBackground
+          source={require('../../assets/images/star.jpg')} style={styles.welcomeImage}>
+            <View style={styles.getStartedContainer}>
+                <Text style={styles.title}>Hello {this.state.name}</Text>
+                <Text style={styles.getStartedText}>Browse from Imgur or Upload your favorite image !</Text>
+            </View>
+          </ImageBackground>
+        
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.getStartedContainer}>
-            <Text style={styles.getStartedText}>Hello {this.state.name}</Text>
-            <Text style={styles.getStartedText}>Browse from Imgur or Upload your favorite image !</Text>
-          </View>
+          <View style={styles.RowButtons}>
+            <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={this._pickFromGallery}
+                    >
 
+                    <Text style={styles.saveButtonText}>Upload picture</Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={this._pickFromCamera}
+                    >
+
+                    <Text style={styles.saveButtonText}>Take a picture</Text>
+
+              </TouchableOpacity>
+            </View>
             <TextInput
               onChangeText={(search) => this.setState({ search })}
               placeholder={'Type here ...'}
               style={styles.input}
               value={this.state.search}
-              autoFocus = {true}
               clearTextOnFocus = {true}
             />  
-            <View>
+            <View style={styles.ButtonSection}>
               <TouchableOpacity
                   style={styles.searchButton}
                   onPress={()=>this.Search()}
-                  value={this.state.search}
                   >
 
-                  <Text style={styles.saveButtonText}>Search</Text>
+                  <Text style={styles.searchButtonText}>Search</Text>
 
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={this._pickFromGallery}
-                  value={this.state.search}
-                  >
-
-                  <Text style={styles.saveButtonText}>Upload picture</Text>
-
-              </TouchableOpacity>
-            </View>
-            <View>
-              <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={this._pickFromCamera}
-                  value={this.state.search}
-                  >
-
-                  <Text style={styles.saveButtonText}>Take a picture</Text>
-
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={styles.getStartedText}>Most Viral</Text>
+              <Text style={styles.viralText}>Most Viral :</Text>
               <FlatList
                 data= {this.state.viral}
                 keyExtractor= {(item) => item.id.toString()}
@@ -253,6 +246,13 @@ export default class MySpace extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  title:{
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: "center",
+    marginTop: 10,
+  },
   image: {
     width: 300,
     height: 300,
@@ -262,72 +262,78 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    paddingTop: 1,
+    paddingVertical: 1
   },
   welcomeImage: {
-    width: 100,
+    width: 400,
     height: 100,
     resizeMode: 'contain',
-    marginTop: 3,
     marginLeft: -10,
   },
   getStartedContainer: {
     alignItems: 'center',
-    marginHorizontal: 50,
   },
   getStartedText: {
-    fontSize: 20,
-    color: 'rgba(96,100,109, 1)',
+    fontSize: 15,
+    marginTop: 10,
+    color: '#fff',
     lineHeight: 30,
     textAlign: 'center',
   },
-  test: {
-    textAlign: "center",
-    marginTop: 50,
-    fontSize: 30,
-    marginBottom: 50,
+  viralText: {
+    fontSize: 20,
+    color: '#010405',
+    lineHeight: 30,
+    marginLeft: 15
   },
-  webview: {
-    width: '100%',
-    height: 300,
-    flex: 1
-  },
+  ButtonSection: {
+    justifyContent: 'center',
+    alignItems: 'center'
+ },
   input: {
     width: 250,
     height: 44,
     padding: 10,
-    marginTop: 30,
+    marginTop: 5,
     marginLeft: 60,
-    backgroundColor: '#ecf0f1'
+    backgroundColor: '#ecf0f1',
+    borderRadius:10
   },
   saveButton: {
-    width: 250,
-    marginLeft: 60,
+    width: 150,
     borderWidth: 1,
     borderColor: '#007BFF',
     backgroundColor: '#007BFF',
-    padding: 15,
-    margin: 5
+    padding: 10,
+    margin: 5, 
+    position: "relative",
+    borderRadius:10
+  },
+  saveButtonText: {
+    color: '#010405',
+    fontSize: 15,
+    textAlign: 'center'
   },
   searchButton: {
-    width: 250,
-    marginLeft: 60,
+    width: 150,
     marginBottom: 30,
     borderWidth: 1,
     borderColor: '#007BFF',
-    backgroundColor: '#2DC3CA',
-    padding: 15,
-    margin: 5
+    backgroundColor: '#007BFF',
+    padding: 10,
+    margin: 5,
+    borderRadius: 10
   },
-  saveButtonText: {
+  searchButtonText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 15,
     textAlign: 'center'
+  },
+  RowButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 

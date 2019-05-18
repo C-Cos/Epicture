@@ -12,33 +12,44 @@ export default class Post extends React.Component {
       }
 
     componentDidMount(){
-        this._ImageAccount();
-    }
-
-    _ImageAccount(){
-        fetch('https://api.imgur.com/3/account/me/images', {
+      AsyncStorage.multiGet(["accessToken", "username"])
+      .then(result => {
+          //console.log(result[0][1]);
+          //console.log(result[1][1]);
+          if(result === null)
+          {
+            this.props.navigation.navigate('Home');
+          }
+          else
+          {
+            fetch('https://api.imgur.com/3/account/me/images', {
             "method": "GET",
             "timeout": 0,
             "headers": {
-              "Authorization": "Bearer 009c835452d021690f1bc8c8484cd6ab339cf8c6"
+              "Authorization": "Bearer " + result[0][1]
             },
             "processData": false,
             "mimeType": "multipart/form-data",
             "contentType": false,
-        })
-        .then((response) => response.json())
-        //If response is in json then in success
-        .then((responseJson) => {
-            this.setState({
-                images: responseJson.data,
             })
-        })
-        //If response is not in json then in error
-        .catch((error) => {
-            //Error 
-            alert(JSON.stringify(error));
-            console.error("error:" + error);
-        });
+            .then((response) => response.json())
+            //If response is in json then in success
+            .then((responseJson) => {
+                this.setState({
+                    images: responseJson.data,
+                })
+            })
+            //If response is not in json then in error
+            .catch((error) => {
+                //Error 
+                alert(JSON.stringify(error));
+                console.error("error:" + error);
+            });
+          }
+      })
+      .catch(err => {
+          console.log(err)
+      })
     }
 
     _renderItem(item){

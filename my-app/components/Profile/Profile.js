@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Text, View, StyleSheet, Button, AsyncStorage, TextInput, TouchableOpacity, Image} from 'react-native';
+import { ScrollView, Text, View, StyleSheet, Button, AsyncStorage, ImageBackground} from 'react-native';
 import TopNavigation from './ProfileNavbar';
 import { createAppContainer, NavigationActions } from 'react-navigation';
 
@@ -51,14 +51,13 @@ export default class Profile extends React.Component {
   render() {
     //console.log(this.state.images);
     return (
-      <View style={styles.container}>
-        <Button
-            title="Logout"
-            onPress={()=>this.removeToken()}
-        />
-        <Text style={styles.getStartedText}>Hello {this.state.name}</Text>
-        <TopNavbar/>
-      </View>
+        <ImageBackground
+          source={require('../../assets/images/star.jpg')} style={styles.welcomeImage}>
+            <View style={styles.getStartedContainer}>
+              <Text style={styles.getStartedText}>Hello {this.state.name}</Text>
+              <TopNavbar/>
+            </View>
+        </ImageBackground>
     );
   }
 }
@@ -66,6 +65,12 @@ export default class Profile extends React.Component {
 const styles = StyleSheet.create({
   position: {
     position: "absolute"
+  },
+  welcomeImage: {
+    width: 400,
+    height: 100,
+    resizeMode: 'contain',
+    marginLeft: -10,
   },
   imageRow: {
     flex: 1, 
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
   },
   getStartedText: {
     fontSize: 20,
-    color: 'rgba(96,100,109, 1)',
+    color: '#fff',
     lineHeight: 30,
     textAlign: 'center',
   },

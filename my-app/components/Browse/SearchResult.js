@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import { Card, Icon} from 'react-native-elements'
 import { FlatList } from 'react-native-gesture-handler';
 
@@ -9,13 +9,13 @@ export default class SearchResult extends React.Component {
         this._AddToFavorite = this._AddToFavorite.bind(this);
       }
     
-    _AddToFavorite(id){
+    _AddToFavorite(id, token){
         //POST request 
         fetch('https://api.imgur.com/3/image/' + id + '/favorite', {
             "method": "POST",
             "timeout": 0,
             "headers": {
-                "Authorization": "Bearer 71ca6576db1cd20c655591cb3628b52a653f823b",
+                "Authorization": "Bearer " + token /* 71ca6576db1cd20c655591cb3628b52a653f823b" */,
                 "Accept": 'application/json'
             },
             
@@ -34,8 +34,8 @@ export default class SearchResult extends React.Component {
         console.error(error);
         });
     }
-    _renderItem(item){
-        console.log(item);
+    _renderItem(item, token){
+        //console.log(token);
         if(typeof item.images === 'object'){
             //console.log('inside');
             return (
@@ -51,12 +51,16 @@ export default class SearchResult extends React.Component {
                     <Text style={{marginBottom: 10}}>
                         {item.images[0].description}
                     </Text>
-                    <Button
-                        icon={<Icon name='code' color='#ffffff' />}
-                        backgroundColor='#03A9F4'
-                        onPress={() => this._AddToFavorite(item.images[0].id)}
-                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                        title='Add to favorite' />
+                    <View style={styles.ButtonSection}>
+                    <TouchableOpacity
+                        style={styles.favorite}
+                        onPress={()=>this._AddToFavorite()}
+                        >
+
+                        <Text style={styles.searchButtonText}>Add to Favorite</Text>
+
+                    </TouchableOpacity>
+                    </View>
                 </Card>
             )
         }
@@ -66,7 +70,7 @@ export default class SearchResult extends React.Component {
     render() {
         const { navigation } = this.props;
         const result = navigation.getParam('result', 'No Result');
-        //const loading = navigation.getParam('loading', "loading");
+        const token = navigation.getParam('token', "token");
         //console.log('render: ', result.length > 0 ? result[0] : 'Nothing');
         //console.log('SearchResult : ', (this.props.result) ? 'fill' : 'nothing');
         return (
@@ -74,7 +78,7 @@ export default class SearchResult extends React.Component {
           <FlatList
             data= {result}
             keyExtractor= {(item) => item.id.toString()}
-            renderItem={({item}) => this._renderItem(item)}
+            renderItem={({item}) => this._renderItem(item, token)}
           />
         </View>
         );
@@ -86,4 +90,23 @@ const styles = StyleSheet.create({
         width: 300,
         height: 300,
     },
+    favorite: {
+        width: 150,
+        marginBottom: 30,
+        borderWidth: 1,
+        borderColor: '#007BFF',
+        backgroundColor: '#fff',
+        padding: 10,
+        margin: 5,
+        borderRadius: 10
+      },
+      searchButtonText: {
+        color: '#007BFF',
+        fontSize: 15,
+        textAlign: 'center'
+      },
+      ButtonSection: {
+        justifyContent: 'center',
+        alignItems: 'center'
+     },
 })
