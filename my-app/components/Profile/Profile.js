@@ -25,7 +25,7 @@ export default class Profile extends React.Component {
           //console.log(result[1][1]);
           if(result === null)
           {
-            this.props.navigation.navigate('Home');
+            this.props.navigation.goBack();
           }
           else
           {
@@ -40,25 +40,11 @@ export default class Profile extends React.Component {
       })
   }
 
-  removeToken(){
-      let keys = ['username', 'accessToken', 'accountId', 'refreshToken'];
-      AsyncStorage.multiRemove(keys, (err) => {
-          console.log('successful remove');
-          this.props.navigation.navigate('Home');
-      });
-  }
-
   render() {
     //console.log(this.state.images);
     return (
-        <ImageBackground
-          source={require('../../assets/images/star.jpg')} style={styles.welcomeImage}>
-            <View style={styles.getStartedContainer}>
-              <Text style={styles.getStartedText}>Hello {this.state.name}</Text>
-              <TopNavbar/>
-            </View>
-        </ImageBackground>
-    );
+      <TopNavbar/>
+    )
   }
 }
 

@@ -43,7 +43,7 @@ BrowseStack.navigationOptions = {
 };
 
 const ProfileStack = createStackNavigator({
-  Profile: Profile
+  Profile: Profile,
 });
 
 ProfileStack.navigationOptions = {
@@ -53,6 +53,8 @@ ProfileStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
     />
+    
+
   ),
 };
 

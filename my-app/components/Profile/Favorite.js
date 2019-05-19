@@ -51,7 +51,7 @@ export default class Favorite extends React.Component {
     _renderItem(item){
         //console.log("item in render: ", item);
         return (
-          <View>
+          <View style={styles.imageRow}>
             <Image
                 source={{ uri: item.link }}
                 style={styles.image}
@@ -64,32 +64,31 @@ export default class Favorite extends React.Component {
     render() {
         //console.log(this.state.images);
         return (
-            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.imageRow}>
+            <View style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <FlatList
                 data= {this.state.images}
+                numColumns={3}
                 keyExtractor= {(item) => item.id.toString()}
                 renderItem={({item}) => this._renderItem(item)}
                 />
             </View>
-            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    position: {
-      position: "relative"
-    },
     imageRow: {
       flex: 1, 
       flexDirection: 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      alignItems: 'center'
     },
     image: {
-        width: 100,
-        height: 100,
-        position: 'relative'
+        width: 120,
+        height: 120,
+        position: 'relative',
+        borderRadius:10,
+        display: 'flex'
     },
     container: {
       flex: 1,
@@ -107,13 +106,5 @@ const styles = StyleSheet.create({
       color: 'rgba(96,100,109, 1)',
       lineHeight: 30,
       textAlign: 'center',
-    },
-    input: {
-      width: 250,
-      height: 44,
-      padding: 10,
-      marginTop: 30,
-      marginLeft: 60,
-      backgroundColor: '#ecf0f1'
     },
   });

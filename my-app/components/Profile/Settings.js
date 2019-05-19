@@ -18,7 +18,7 @@ export default class MySpace extends React.Component {
           //console.log(result[1][1]);
           if(result === null)
           {
-            this.props.navigation.navigate('Home');
+            //this.props.navigation.navigate('Home');
           }
           else
           {
@@ -44,14 +44,26 @@ export default class MySpace extends React.Component {
   render() {
     return (
       <KeyboardAwareScrollView
-            style={{ backgroundColor: '#fff' }}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={styles.container}
-            scrollEnabled={true}>
-        <Button
-            title="Logout"
-            onPress={()=>this.removeToken()}
-        />
+        style={{ backgroundColor: '#fff' }}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={styles.container}
+        scrollEnabled={true}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={this.removeToken}
+          >
+
+          <Text style={styles.saveButtonText}>Logout</Text>
+
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={this.deleteAccount}
+          >
+
+          <Text style={styles.saveButtonText}>Delete Account</Text>
+
+        </TouchableOpacity>
       </KeyboardAwareScrollView>
     );
   }
@@ -91,25 +103,6 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'center',
   },
-  test: {
-    textAlign: "center",
-    marginTop: 50,
-    fontSize: 30,
-    marginBottom: 50,
-  },
-  webview: {
-    width: '100%',
-    height: 300,
-    flex: 1
-  },
-  input: {
-    width: 250,
-    height: 44,
-    padding: 10,
-    marginTop: 30,
-    marginLeft: 60,
-    backgroundColor: '#ecf0f1'
-  },
   saveButton: {
     width: 250,
     marginLeft: 60,
@@ -117,17 +110,9 @@ const styles = StyleSheet.create({
     borderColor: '#007BFF',
     backgroundColor: '#007BFF',
     padding: 15,
-    margin: 5
-  },
-  searchButton: {
-    width: 250,
-    marginLeft: 60,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: '#007BFF',
-    backgroundColor: '#2DC3CA',
-    padding: 15,
-    margin: 5
+    margin: 5,
+    position: "relative",
+    borderRadius:10
   },
   saveButtonText: {
     color: '#FFFFFF',

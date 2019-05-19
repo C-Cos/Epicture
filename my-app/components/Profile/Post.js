@@ -55,11 +55,10 @@ export default class Post extends React.Component {
     _renderItem(item){
         //console.log("item in render: ", item);
         return (
-          <View>
+          <View style={styles.imageRow}>
             <Image
                 source={{ uri: item.link }}
                 style={styles.image}
-                //PlaceholderContent={<ActivityIndicator />}
             />
           </View>
         )
@@ -68,39 +67,40 @@ export default class Post extends React.Component {
     render() {
         //console.log(this.state.images);
         return (
-            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.imageRow}>
+            <View style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <FlatList
                 data= {this.state.images}
+                //horizontal= {true}
+                numColumns={3}
                 keyExtractor= {(item) => item.id.toString()}
                 renderItem={({item}) => this._renderItem(item)}
                 />
             </View>
-            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    position: {
-      position: "relative"
-    },
     imageRow: {
       flex: 1, 
       flexDirection: 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     image: {
-        width: 100,
-        height: 100,
-        position: 'relative'
+        width: 120,
+        height: 120,
+        position: "relative",
+        borderRadius:10,
+        display: 'flex'
+
     },
     container: {
       flex: 1,
       backgroundColor: '#fff',
     },
     contentContainer: {
-      paddingTop: 30,
+      width: 350,
     },
     getStartedContainer: {
       alignItems: 'center',

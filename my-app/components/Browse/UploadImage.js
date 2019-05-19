@@ -57,8 +57,8 @@ export default class UploadImage extends React.Component {
         })
         //If response is not in json then in error
         .catch((error) => {
-        alert(JSON.stringify(error));
-        console.error(error);
+            alert('Oops, something went wrong.');
+            console.error(error);
         });
     }
 
